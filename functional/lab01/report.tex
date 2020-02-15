@@ -1,0 +1,183 @@
+\documentclass[a4paper]{report}
+
+\include{preamble.inc}
+
+\begin{document}
+
+\begin{task}
+	Представить следующие списки в виде списочных ячеек:
+	\begin{AutoMultiColEnumerate}
+		\item \code{'(open close halph)}
+		\item \code{'((open1) (close2) (halph3))}
+		\item \code{'((one) for all (and(me(for you))))}
+		\item \code{'((TOOL) (call))}
+		\item \code{'((TOOL1) ((call2)) ((sell)))}
+		\item \code{'(((TOOL) (call)) ((sell)))}
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\begin{figure}[!h]
+	\begin{tabular}{|l|l|}
+		\hline
+		\includegraphics[scale=0.475]{inc/img/task0101.pdf} & \includegraphics[scale=0.475]{inc/img/task0104.pdf} \\\hline
+		\includegraphics[scale=0.475]{inc/img/task0102.pdf} & \includegraphics[scale=0.475]{inc/img/task0105.pdf} \\\hline
+		\includegraphics[scale=0.475]{inc/img/task0103.pdf} & \includegraphics[scale=0.475]{inc/img/task0106.pdf} \\\hline
+	\end{tabular}
+\end{figure}
+
+\begin{task}
+	Используя только функции \code{CAR} и \code{CDR}, написать выражения, возвращающие 1) второй 2) третий 3) четвёртый элементы заданного списка.
+\end{task}
+
+\begin{AutoMultiColEnumerate}
+	\item
+\begin{lstlisting}[style=lispinline]
+(car (cdr '(1 2 3 4 5)))             ; second
+\end{lstlisting}
+
+	\item
+\begin{lstlisting}[style=lispinline]
+(car (cdr (cdr '(1 2 3 4 5))))       ; third
+\end{lstlisting}
+
+	\item
+\begin{lstlisting}[style=lispinline]
+(car (cdr (cdr (cdr '(1 2 3 4 5))))) ; fourth
+\end{lstlisting}
+\end{AutoMultiColEnumerate}
+
+\begin{task}
+	Что будет в результате вычисления выражений?
+	\begin{AutoMultiColEnumerate}
+		\item
+\begin{lstlisting}[style=lispinline]
+(CAADR '((blue cude) (red pyramid))) ; red
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(CDAR '((abc) (def) (ghi)))          ; Nil
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(CADR '((abc) (def) (ghi)))          ; (def)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(CADDR '((abc) (def) (ghi)))         ; (ghi)
+\end{lstlisting}
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\begin{task}
+	Напишите результат вычисления выражений:
+	\begin{AutoMultiColEnumerate}
+		\item
+\begin{lstlisting}[style=lispinline]
+(list 'Fred 'and Wilma)
+; The variable Wilma is unbound.
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list 'Fred '(and Wilma))
+; (Fred (and Wilma))
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons Nil Nil)
+; (Nil)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons T Nil)
+; (T)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons Nil T)
+; (Nil . T)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list Nil)
+; (Nil)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons (T) Nil)
+; The function T is undefined.
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list '(one two) '(free temp))
+; ((one two) (free temp))
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons 'Fred '(and Wilma))
+; (Fred and Wilma)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons 'Fred 'Wilma)
+; (Fred . Wilma)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list Nil Nil)
+; (Nil Nil)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list T Nil)
+; (T Nil)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list Nil T)
+; (Nil T)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons T (list Nil))
+; (T Nil)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list (T) Nil)
+; The function T is undefined.
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons '(one two) '(free temp))
+; ((one two) free temp)
+\end{lstlisting}
+
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\begin{task}
+	Написать функцию \code{(f ar1 ar2 ar3 ar4)}, возвращающую список: \code{((ar1 ar2) (ar3 ar4))}.
+	Написать функцию \code{(f ar1 ar2)}, возвращающую список: \code{((ar1) (ar2))}.
+	Написать функцию \code{(f ar1)}, возвращающую список: \code{(((ar1)))}.
+	Представить результаты в виде списочных ячеек.
+\end{task}
+
+\end{document}
