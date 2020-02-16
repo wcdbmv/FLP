@@ -180,4 +180,25 @@
 	Представить результаты в виде списочных ячеек.
 \end{task}
 
+\begin{lstlisting}[style=lispinline, frame=single]
+(defun f (a1 a2 a3 a4)
+	`((,a1 ,a2) (,a3 ,a4))
+)
+
+(defun f (a1 a2)
+	`((,a1) (,a2))
+)
+
+(defun f (a1)
+	`(((,a1)))
+)
+\end{lstlisting}
+
+\begin{figure}[!h]
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\includegraphics[scale=0.625]{inc/img/task0501.pdf} & \includegraphics[scale=0.625]{inc/img/task0502.pdf} & \includegraphics[scale=0.625]{inc/img/task0503.pdf} \\\hline
+	\end{tabular}
+\end{figure}
+
 \end{document}
