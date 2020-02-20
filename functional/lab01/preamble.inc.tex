@@ -1,0 +1,132 @@
+\usepackage{cmap} % Улучшенный поиск русских слов в полученном pdf-файле
+\usepackage[T2A]{fontenc} % Поддержка русских букв
+\usepackage[utf8]{inputenc} % Кодировка utf8
+\usepackage[english,russian]{babel} % Языки: русский, английский
+
+% \usepackage{setspace}
+% \onehalfspacing % Полуторный интервал
+
+\frenchspacing
+\usepackage{indentfirst} % Красная строка
+
+%                30                    20           20
+\usepackage[left=20mm, right=10mm, top=15mm, bottom=15mm]{geometry}
+
+\usepackage{titlesec}
+\titlespacing*{\chapter}{0pt}{-30pt}{8pt}
+\titlespacing*{\section}{\parindent}{*4}{*4}
+\titlespacing*{\subsection}{\parindent}{*4}{*4}
+\titleformat{\chapter}{\LARGE\bfseries}{\thechapter}{20pt}{\LARGE\bfseries}
+\titleformat{\section}{\Large\bfseries}{\thesection}{20pt}{\Large\bfseries}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{commath}
+\usepackage{icomma}
+
+\usepackage[unicode,pdftex]{hyperref} % Ссылки в pdf
+\hypersetup{hidelinks}
+
+\usepackage{graphicx}
+
+%% begin theorem
+\usepackage{amsthm}
+
+\makeatletter
+\newtheoremstyle{indented}
+	{}% measure of space to leave above the theorem
+	{}% measure of space to leave below the theorem
+	{}% name of font to use in the body of the theorem
+	{\parindent}% measure of space to indent
+	{\bfseries}% name of head font
+	{.}% punctuation between head and body
+	{ }% space after theorem head; " " = normal interword space
+	{}% header specification (empty for default)
+\makeatother
+
+\theoremstyle{indented}
+
+\newtheorem{definition}{Определение}[section]
+\newtheorem{example}{Пример}[section]
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{task}{Задание}
+
+\makeatletter
+\DeclareRobustCommand\bfseriesitshape{%
+	\not@math@alphabet\itshapebfseries\relax
+	\fontseries\bfdefault
+	\fontshape\itdefault
+	\selectfont
+}
+\makeatother
+
+\DeclareTextFontCommand{\textbfit}{\bfseriesitshape}
+\DeclareTextFontCommand{\define}{\bfseriesitshape}
+%% end theorem
+
+%% begin columns
+\usepackage{etoolbox,refcount}
+\usepackage{multicol}
+
+\newcounter{countitems}
+\newcounter{nextitemizecount}
+\newcommand{\setupcountitems}{%
+	\stepcounter{nextitemizecount}%
+	\setcounter{countitems}{0}%
+	\preto\item{\stepcounter{countitems}}%
+}
+\makeatletter
+\newcommand{\computecountitems}{%
+	\edef\@currentlabel{\number\c@countitems}%
+	\label{countitems@\number\numexpr\value{nextitemizecount}-1\relax}%
+}
+\newcommand{\nextitemizecount}{%
+	\getrefnumber{countitems@\number\c@nextitemizecount}%
+}
+\newcommand{\previtemizecount}{%
+	\getrefnumber{countitems@\number\numexpr\value{nextitemizecount}-1\relax}%
+}
+\makeatother
+\newenvironment{AutoMultiColItemize}{%
+	\ifnumcomp{\nextitemizecount}{>}{3}{\begin{multicols}{2}}{}%
+		\setupcountitems\begin{itemize}}%
+		{\end{itemize}%
+		\unskip\computecountitems\ifnumcomp{\previtemizecount}{>}{3}{\end{multicols}}{}}
+\makeatother
+\newenvironment{AutoMultiColEnumerate}{%
+	\ifnumcomp{\nextitemizecount}{>}{3}{\begin{multicols}{2}}{}%
+		\setupcountitems\begin{enumerate}}%
+		{\end{enumerate}%
+		\unskip\computecountitems\ifnumcomp{\previtemizecount}{>}{3}{\end{multicols}}{}}
+%% end columns
+
+
+%% begin code
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstdefinestyle{lispinline}{
+	language=Lisp,
+	backgroundcolor=\color{white},
+	basicstyle=\footnotesize\ttfamily,
+	keywordstyle=\color{blue},
+	stringstyle=\color{red},
+	commentstyle=\color{gray},
+	tabsize=8,
+	captionpos=b,
+	breaklines=true,
+	breakatwhitespace=true,
+	escapeinside={\#*}{*)},
+	morecomment=[l][\color{magenta}]{\#}
+}
+
+\newcommand{\code}[1]{\texttt{#1}}
+%% end code
+
+\usepackage{pgfplots}
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{datavisualization.formats.functions}
+
+\newenvironment{qanda}{\setlength{\parindent}{0pt}}{\bigskip}
+\newcommand{\Q}{\bigskip\bfseries}
+\newcommand{\A}{\par\normalfont}
