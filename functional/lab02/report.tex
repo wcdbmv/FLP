@@ -1,0 +1,248 @@
+\documentclass[a4paper]{report}
+
+\include{preamble.inc}
+
+\begin{document}
+
+\include{title}
+
+\section*{Практическая часть}
+
+\begin{task}
+	Что будет в результате вычисления выражений?
+	\begin{AutoMultiColEnumerate}
+		\item
+\begin{lstlisting}[style=lispinline]
+(CAADR '((blue cude) (red pyramid))) ; red
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(CDAR '((abc) (def) (ghi)))          ; Nil
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(CADR '((abc) (def) (ghi)))          ; (def)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(CADDR '((abc) (def) (ghi)))         ; (ghi)
+\end{lstlisting}
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\begin{task}
+	Напишите результат вычисления выражений:
+	\begin{AutoMultiColEnumerate}
+		\item
+\begin{lstlisting}[style=lispinline]
+(list 'Fred 'and Wilma)
+; The variable Wilma is unbound.
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list 'Fred '(and Wilma))
+; (Fred (and Wilma))
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons Nil Nil)
+; (Nil)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons T Nil)
+; (T)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons Nil T)
+; (Nil . T)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list Nil)
+; (Nil)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons (T) Nil)
+; The function T is undefined.
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list '(one two) '(free temp))
+; ((one two) (free temp))
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons 'Fred '(and Wilma))
+; (Fred and Wilma)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons 'Fred 'Wilma)
+; (Fred . Wilma)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list Nil Nil)
+; (Nil Nil)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list T Nil)
+; (T Nil)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list Nil T)
+; (Nil T)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons T (list Nil))
+; (T Nil)
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(list (T) Nil)
+; The function T is undefined.
+\end{lstlisting}
+
+		\item
+\begin{lstlisting}[style=lispinline]
+(cons '(one two) '(free temp))
+; ((one two) free temp)
+\end{lstlisting}
+
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\begin{task}
+	Написать функцию \code{(f ar1 ar2 ar3 ar4)}, возвращающую список: \code{((ar1 ar2) (ar3 ar4))}.
+	Написать функцию \code{(f ar1 ar2)}, возвращающую список: \code{((ar1) (ar2))}.
+	Написать функцию \code{(f ar1)}, возвращающую список: \code{(((ar1)))}.
+	Представить результаты в виде списочных ячеек.
+\end{task}
+
+\begin{lstlisting}[style=lispinline, frame=single]
+(defun f (a1 a2 a3 a4)
+	`((,a1 ,a2) (,a3 ,a4))
+)
+
+(defun f (a1 a2)
+	`((,a1) (,a2))
+)
+
+(defun f (a1)
+	`(((,a1)))
+)
+\end{lstlisting}
+
+\begin{figure}[!h]
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\includegraphics[scale=0.625]{inc/img/task0501.pdf} & \includegraphics[scale=0.625]{inc/img/task0502.pdf} & \includegraphics[scale=0.625]{inc/img/task0503.pdf} \\\hline
+	\end{tabular}
+\end{figure}
+
+\section*{Теоретическая часть}
+
+\subsection*{Базис Lisp}
+
+Базис Лиспа предельно лаконичен — атомы и структуры из простейших бинарных узлов плюс несколько базовых функций и функционалов.
+Базис содержит встроенные (примитивные) функции, которые анализируют, строят и разбирают любые структурные значения (\code{atom}, \code{eq}, \code{cons}, \code{car}, \code{cdr}), и встроенные специальные функции и функционалы, которые управляют обработкой структур, представляющих вычисляемые выражения (\code{quote}, \code{cond}, \code{lambda}, \code{eval}).
+
+\subsection*{Классификация функций}
+
+\define{Классификация функций:}
+\begin{enumerate}
+	\item чистые математические функции (имеют фиксированное количество аргументов и один результат);
+	\item формы (имеют произвольное количество аргументов или эти аргументы обрабатываются не все одинаково);
+	\item функциональные (в качестве одного из аргументов принимают описание функции).
+\end{enumerate}
+
+\define{Классификация базисных функций:}
+\begin{enumerate}
+	\item функции-селекторы: \code{car}, \code{cdr};
+	\item функции-конструкторы: \code{cons}, \code{list};
+	\item функции-предикаты: \code{atom}, \code{null}, \code{listp}, \code{consp};
+	\item функции сравнения: \code{eq}, \code{eql}, \code{equal}, \code{equalp}.
+\end{enumerate}
+
+\subsection*{Как представляются списки в ОП?}
+
+Любая непустая структура Lisp в памяти представляется списковой ячейкой, хранящей два указателя: на
+голову (первый элемент) и хвост — всё остальное.
+
+\subsection*{Функции car и cdr в разных случаях}
+
+Функция \code{car} обеспечивает доступ к первому элементу списка — его «голове», а функция \code{cdr} — к укороченному на один элемент списку - его «хвосту», т.~е. к тому, что остается после удаления головы.
+\begin{AutoMultiColEnumerate}
+	\item
+\begin{lstlisting}[style=lispinline]
+(car (A B C))
+; A
+\end{lstlisting}
+
+	\item
+\begin{lstlisting}[style=lispinline]
+(car (A (B C)))
+; A
+\end{lstlisting}
+
+	\item
+\begin{lstlisting}[style=lispinline]
+(car ((A B) C))
+; (A B)
+\end{lstlisting}
+
+	\item
+\begin{lstlisting}[style=lispinline]
+(car A)
+; The variable A is unbound.
+\end{lstlisting}
+
+	\item
+\begin{lstlisting}[style=lispinline]
+(cdr (A))
+; Nil
+\end{lstlisting}
+
+	\item
+\begin{lstlisting}[style=lispinline]
+(cdr (A B C D))
+; (B C D)
+\end{lstlisting}
+
+	\item
+\begin{lstlisting}[style=lispinline]
+(cdr (A (B C)))
+; ((A B))
+\end{lstlisting}
+
+	\item
+\begin{lstlisting}[style=lispinline]
+(cdr A)
+; The variable A is unbound.
+\end{lstlisting}
+\end{AutoMultiColEnumerate}
+
+\end{document}
