@@ -1,0 +1,133 @@
+\documentclass[a4paper,oneside,12pt]{extreport}
+
+\include{preamble}
+
+\begin{document}
+
+\include{title}
+
+\section*{Практическая часть}
+
+\begin{task}
+	Дана функция \code{(defun mystery (x) (list (second x) (first x)))}.
+	Какие результаты вычисления следующих выражений?
+	\begin{AutoMultiColEnumerate}
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(mystery (one two))
+			; (two one)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(mystery one 'two))
+			; Invalid number of arguments: 2.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(mystery 'free)
+			; The value FREE is not LIST.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(mystery (last 'one 'two))
+			; The value ONE is not LIST.
+		\end{lstlisting}
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\begin{task}
+	Написать функцию, которая переводит температуру в системе Фаренгейта температуру по Цельсию \code{(defun f-to-c (temp) ...)}.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun f-to-c (temp)
+			(*
+				(/ 5 9)
+				(- temp 32.0)
+			)
+		)
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Что получится при вычисления каждого из выражений?
+	\begin{AutoMultiColEnumerate}
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(list 'cons T Nil))
+			; (cons T Nil)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cons 'a (b c))
+			; Undefined function: b.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(eval (eval (list 'cons T Nil)))
+			; Undefined functionz: T
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(apply #'cons '(T Nil))	
+			; (T)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(list 'eval Nil)
+			; (eval Nil)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(eval (list 'cons T Nil))
+			; (T)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(eval Nil)
+			; Nil
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(eval (list 'eval NIL))
+			; Nil
+		\end{lstlisting}
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\begin{task}
+	Написать функцию, вычисляющую катет по заданной гипотенузе и другому катету прямоугольного треугольника, и составить диаграмму её вычисления.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun cathetus (c b)
+			(sqrt
+				(-
+					(* c c)
+					(* b b)
+				)
+			)
+		)
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать функцию, вычисляющую площадь трапеции по ее основаниям и высоте, и составить диаграмму ее вычисления.
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun trapezoid-area (base1 base2 height)
+			(/
+				(*
+					(+ base1 base2)
+					height
+				)
+				2.0
+			)
+		)
+	\end{lstlisting}
+\end{task}
+
+\section*{Теоретическая часть}
+
+\subsection*{Как синтаксически представляется программа на Lisp}
+
+\subsection*{Как трактуются элементы списка?}
+
+\subsection*{Порядок реализации программы}
+
+\end{document}
