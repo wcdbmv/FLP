@@ -1,0 +1,156 @@
+\documentclass[a4paper,oneside,12pt]{extreport}
+
+\include{preamble}
+
+\begin{document}
+
+\include{title}
+
+\section*{Практическая часть}
+
+\begin{task}
+	Составить диаграмму вычисления следующих выражений:
+	\begin{AutoMultiColEnumerate}
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(equal 3 (abs -3))       ; T
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(equal (* 2 3) (+ 7 2))  ; Nil
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(equal (+ 1 2) 3)        ; T
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(equal (- 7 3) (* 3 2))  ; Nil
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(equal (* 4 7) 21)       ; Nil
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(equal (abs (- 2 4)) 3)) ; Nil
+		\end{lstlisting}
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\begin{task}
+	Написать функцию, вычисляющую гипотенузу прямоугольного треугольника по заданным катетам и составить диаграмму её вычисления.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun hypotenuse (a b)
+			(sqrt (+ (* a a) (* b b)))
+		)
+	\end{lstlisting}
+\end{task}
+
+
+\begin{task}
+	Написать функцию, вычисляющую объём параллелепипеда по 3-м его сторонам, и составить диаграмму её вычисления.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun parallelepiped-volume (a b c)
+			(* a b c)
+		)
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Каковы результаты вычисления следующих выражений?
+	\begin{AutoMultiColEnumerate}
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(list 'a 'b c)
+			; The variable c is unbound.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cons 'a (b c))
+			; Undefined function: b.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cons 'a '(b c))
+			; (a b c)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(caddr (1 2 3 4 5))
+			; Illegal function call.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cons 'a 'b 'c)
+			; Invalid number of arguments: 3.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(list 'a (b c))
+			; Undefined function: b.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(list a '(b c))
+			; The variable a is unbound.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(list (+ 1 '(length '(1 2 3))))
+			; The value (length '(1 2 3)) is not of type number.
+		\end{lstlisting}
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\begin{task}
+	Написать функцию \code{longer-than} от двух списков-аргументов, которая возвращает \code{T}, если первый аргумент имеет большую длину.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun longer-than (a b)
+			(> (list-length a) (list-length b))
+		)
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Каковы результаты вычисления следующих выражений?
+	\begin{AutoMultiColEnumerate}
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cons 3 (list 5 6))
+			; (3 5 6)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cons 3 '(list 5 6))
+			; (3 list 5 6)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(list 3 'from 9 'gives (- 9 3))
+			; (3 from 9 gi 6)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(+ (length '(1 foo 2 too)) (car '(21 22 23)))
+			; 25
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cdr '(cons is short for ans))
+			; (is short for ans)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(car (list one two))
+			; The variable one is unbound.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(car (list 'one 'two))
+			; one
+		\end{lstlisting}
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\end{document}
