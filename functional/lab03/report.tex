@@ -42,8 +42,9 @@
 
 	\begin{lstlisting}[language=Lisp, gobble=16]
 		(defun hypotenuse (a b)
-			(sqrt (+ (* a a) (* b b)))
-		)
+		  (sqrt
+		    (+ (* a a)
+		       (* b b))))
 	\end{lstlisting}
 \end{task}
 
@@ -53,8 +54,7 @@
 
 	\begin{lstlisting}[language=Lisp, gobble=16]
 		(defun parallelepiped-volume (a b c)
-			(* a b c)
-		)
+		  (* a b c))
 	\end{lstlisting}
 \end{task}
 
@@ -108,8 +108,8 @@
 
 	\begin{lstlisting}[language=Lisp, gobble=16]
 		(defun longer-than (a b)
-			(> (list-length a) (list-length b))
-		)
+		  (> (list-length a)
+		     (list-length b)))
 	\end{lstlisting}
 \end{task}
 
@@ -197,7 +197,7 @@
 
 Функция \code{list} строит список, не является чистой, так как имеет произвольное количество аргументов.
 \begin{lstlisting}[style=lispinline, gobble=8]
-	(list 'a 'b 'c)   ; (a b c)
+	(list 'a 'b 'c)  ; (a b c)
 	(list 'a '(b c)) ; (a (b c))
 \end{lstlisting}
 
