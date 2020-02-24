@@ -39,11 +39,8 @@
 
 	\begin{lstlisting}[language=Lisp, gobble=16]
 		(defun f-to-c (temp)
-			(*
-				(/ 5 9)
-				(- temp 32.0)
-			)
-		)
+		  (* (/ 5 9)
+		     (- temp 32.0)))
 	\end{lstlisting}
 \end{task}
 
@@ -97,13 +94,9 @@
 
 	\begin{lstlisting}[language=Lisp, gobble=16]
 		(defun cathetus (c b)
-			(sqrt
-				(-
-					(* c c)
-					(* b b)
-				)
-			)
-		)
+		  (sqrt
+		    (- (* c c)
+		       (* b b))))
 	\end{lstlisting}
 \end{task}
 
@@ -111,14 +104,12 @@
 	Написать функцию, вычисляющую площадь трапеции по ее основаниям и высоте, и составить диаграмму ее вычисления.
 	\begin{lstlisting}[language=Lisp, gobble=16]
 		(defun trapezoid-area (base1 base2 height)
-			(/
-				(*
-					(+ base1 base2)
-					height
-				)
-				2.0
-			)
-		)
+		  (/
+		    (*
+		      (+ base1
+		         base2)
+		      height)
+		    2.0))
 	\end{lstlisting}
 \end{task}
 
