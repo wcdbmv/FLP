@@ -1,0 +1,204 @@
+\documentclass[a4paper,oneside,12pt]{extreport}
+
+\include{preamble}
+
+\begin{document}
+
+\include{title}
+
+\section*{Практическая часть}
+
+\begin{task}
+	Составить диаграмму вычисления следующих выражений:
+	\begin{AutoMultiColEnumerate}
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(equal 3 (abs -3))       ; T
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(equal (* 2 3) (+ 7 2))  ; Nil
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(equal (+ 1 2) 3)        ; T
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(equal (- 7 3) (* 3 2))  ; Nil
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(equal (* 4 7) 21)       ; Nil
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(equal (abs (- 2 4)) 3)) ; Nil
+		\end{lstlisting}
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\begin{task}
+	Написать функцию, вычисляющую гипотенузу прямоугольного треугольника по заданным катетам и составить диаграмму её вычисления.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun hypotenuse (a b)
+		  (sqrt
+		    (+ (* a a)
+		       (* b b))))
+	\end{lstlisting}
+\end{task}
+
+
+\begin{task}
+	Написать функцию, вычисляющую объём параллелепипеда по 3-м его сторонам, и составить диаграмму её вычисления.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun parallelepiped-volume (a b c)
+		  (* a b c))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Каковы результаты вычисления следующих выражений?
+	\begin{AutoMultiColEnumerate}
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(list 'a 'b c)
+			; The variable c is unbound.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cons 'a (b c))
+			; Undefined function: b.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cons 'a '(b c))
+			; (a b c)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(caddr (1 2 3 4 5))
+			; Illegal function call.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cons 'a 'b 'c)
+			; Invalid number of arguments: 3.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(list 'a (b c))
+			; Undefined function: b.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(list a '(b c))
+			; The variable a is unbound.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(list (+ 1 '(length '(1 2 3))))
+			; The value (length '(1 2 3)) is not of type number.
+		\end{lstlisting}
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\begin{task}
+	Написать функцию \code{longer-than} от двух списков-аргументов, которая возвращает \code{T}, если первый аргумент имеет большую длину.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun longer-than (a b)
+		  (> (list-length a)
+		     (list-length b)))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Каковы результаты вычисления следующих выражений?
+	\begin{AutoMultiColEnumerate}
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cons 3 (list 5 6))
+			; (3 5 6)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cons 3 '(list 5 6))
+			; (3 list 5 6)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(list 3 'from 9 'gives (- 9 3))
+			; (3 from 9 gi 6)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(+ (length '(1 foo 2 too)) (car '(21 22 23)))
+			; 25
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(cdr '(cons is short for ans))
+			; (is short for ans)
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(car (list one two))
+			; The variable one is unbound.
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(car (list 'one 'two))
+			; one
+		\end{lstlisting}
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\section*{Теоретическая часть}
+
+\subsection*{Базис Lisp}
+
+Базис Lisp предельно лаконичен — атомы и структуры из простейших бинарных узлов плюс несколько базовых функций и функционалов.
+Базис содержит встроенные (примитивные) функции, которые анализируют, строят и разбирают любые структурные значения (\code{atom}, \code{eq}, \code{cons}, \code{car}, \code{cdr}), и встроенные специальные функции и функционалы, которые управляют обработкой структур, представляющих вычисляемые выражения (\code{quote}, \code{cond}, \code{lambda}, \code{eval}).
+
+\subsection*{Варианты классификаций функций Lisp}
+
+Классификация функций:
+\begin{enumerate}
+	\item чистые математические функции (имеют фиксированное количество аргументов и один результат);
+	\item формы (имеют произвольное количество аргументов или эти аргументы обрабатываются не все одинаково);
+	\item функциональные (в качестве одного из аргументов принимают описание функции).
+\end{enumerate}
+
+Классификация базисных функций:
+\begin{enumerate}
+	\item функции-селекторы: \code{car}, \code{cdr};
+	\item функции-конструкторы: \code{cons}, \code{list};
+	\item функции-предикаты: \code{atom}, \code{null}, \code{listp}, \code{consp};
+	\item функции сравнения: \code{eq}, \code{eql}, \code{equal}, \code{equalp}.
+\end{enumerate}
+
+\subsection*{Как представляются списки в ОП}
+
+Любая непустая структура Lisp в памяти представляется списковой ячейкой, хранящей два указателя: на голову (первый элемент) и хвост — всё остальное.
+
+\subsection*{Как работают car и cdr}
+
+Функция \code{car} обеспечивает доступ к первому элементу списка — его «голове», а функция \code{cdr} — к укороченному на один элемент списку - его «хвосту», т.~е. к тому, что остается после удаления головы.
+
+\subsection*{Отличие работы list и cons}
+
+Функция \code{cons} строит списки из бинарных узлов, заполняя их парами объектов, являющихся значениями пары её аргументов.
+Первый аргумент произвольного вида размещается в левой части бинарного узла, а второй, являющийся списком, — в правой.
+
+\begin{lstlisting}[style=lispinline, gobble=8]
+	(cons 'a 'b)   ; (a . b)
+	(cons 'a '(b)) ; (a b)
+\end{lstlisting}
+
+Функция \code{list} строит список, не является чистой, так как имеет произвольное количество аргументов.
+\begin{lstlisting}[style=lispinline, gobble=8]
+	(list 'a 'b 'c)  ; (a b c)
+	(list 'a '(b c)) ; (a (b c))
+\end{lstlisting}
+
+\end{document}
