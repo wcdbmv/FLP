@@ -1,0 +1,139 @@
+\documentclass[a4paper,oneside,12pt]{extreport}
+
+\include{preamble}
+
+\begin{document}
+
+\include{title}
+
+\section*{Практическая часть}
+
+\begin{task}
+	Написать функцию, которая принимает целое число и возвращает первое чётное число, не меньшее аргумента.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun f (x)
+		  (+ x (mod x 2)))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать функцию, которая принимает число и возвращает число того же знака, но с модулем на 1 больше модуля аргумента.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun f (x)
+		  (+ x (signum x)))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать функцию, которая принимает два числа и возвращает список из этих чисел, расположенных по возрастанию.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun f (a b)
+		  (if (< a b)
+		      (list a b)
+		      (list b a))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать функцию, которая принимает три числа и возвращает T только тогда, когда первое число расположено между вторым и третьим.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun f (a b c)
+		  (and (<= a b) (<= b c))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Каков результат вычисления следующих выражений?
+	\begin{AutoMultiColEnumerate}
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(and 'fee 'fie 'foe)
+			; foe
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(or 'fee 'fie 'foe)
+			; fee
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(and (equal 'abc 'abc) 'yes)
+			; yes
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(or nil 'fie 'foe)
+			; fie
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(and nil 'fie 'foe)
+			; nil
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(or (equal 'abc 'abc) 'yes)
+			; T
+		\end{lstlisting}
+	\end{AutoMultiColEnumerate}
+\end{task}
+
+\begin{task}
+	Написать предикат, который принимает два числа-аргумента и возвращает T, если первое число не меньше второго.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun f (a b)
+		  (>= a b))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Какой из следующих двух вариантов предикатов ошибочен и почему?
+	\begin{AutoMultiColEnumerate}
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(defun pred1 (x)
+			  (and (numberp x) (plusp x)))
+		\end{lstlisting}
+
+		\item \begin{lstlisting}[style=lispinline, gobble=24]
+			(defun pred2 (x)
+			  (and (plusp x) (numberp x)))
+		\end{lstlisting}
+	\end{AutoMultiColEnumerate}
+
+	Ошибочен предикат \code{pred2}, так как сначала вычисляется \code{plusp}, который может вернуть ошибку в случае, если \code{x} не будет действительным числом.
+\end{task}
+
+\begin{task}
+	Решить задачу 4, используя для её решения конструкции \code{if}, \code{cond}, \code{and}/\code{or}.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun f (a b c)
+		  (if (<= a b)
+		      (if (<= b c)
+		          t
+		          nil)
+		      nil))
+
+		(defun f (a b c)
+		  (cond ((<= a b)
+		         (cond ((<= b c) t)
+		                (t nil)))
+		         (t nil)))
+	\end{lstlisting}
+\end{task}
+
+%\section*{Теоретическая часть}
+
+%\subsection*{Определение атома, представление его в памяти}
+
+%\subsection*{Самовычислимый атом}
+
+%\subsection*{Локальное и глобальное определение значений атома}
+
+%\subsection*{eval и quote}
+
+\end{document}
