@@ -1,0 +1,81 @@
+\documentclass[a4paper,oneside,12pt]{extreport}
+
+\include{preamble}
+
+\begin{document}
+
+\include{title}
+
+\begin{task}
+	Переписать функцию \code{how-alike}, приведённую в лекции и использующую \code{cond}, используя конструкции \code{if}, \code{and}/\code{or}.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun how-alike (x y)
+		  (cond
+		    ((or (equal x y) (= x y)) 'the_same)
+		    ((and (oddp x) (oddp y)) 'both_odd)
+		    ((and (evenp x) (evenp y)) 'both_even)
+		    (T 'difference)))
+
+		(defun how-alike2 (x y)
+		  (if (if (equal x y) T (= x y)) 'the_same
+		      (if (if (oddp x) (oddp y)) 'both_odd
+		          (if (if (evenp x) (evenp y)) 'both_even
+		              'difference))))
+
+		(defun how-alike3 (x y)
+		  (or (and (equal x y) 'the_same)
+		      (and (= x y) 'the_same)
+		      (and (oddp x) (oddp y) 'both_odd)
+		      (and (evenp x) (evenp y) 'both_even)
+		      'difference))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Дано 2 списка: в 1-м — страны, во 2-м — столицы.
+	Создать список из двухэлементных списков.
+	По стране вернуть столицу, по столице — страну.
+
+	1-й способ — только для списков из 4 элементов.
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun make-dict (countries capitals)
+		  (list
+		    (list (car countries) (car capitals))
+		    (list (cadr countries) (cadr capitals))
+		    (list (caddr countries) (caddr capitals))
+		    (list (cadddr countries) (cadddr capitals))))
+
+		(defun get-capital (dict country)
+		  (or (and (equal (caar dict) country) (cadar dict))
+		      (and (equal (caadr dict) country) (cadadr dict))
+		      (and (equal (caaddr dict) country) (car (cdaddr dict)))
+		      (and (equal (caaddr (cdr dict)) country) (cadadr (cddr dict)))))
+
+		(defun get-country (dict capital)
+		  (or (and (equal (cadar dict) capital) (caar dict))
+		      (and (equal (cadadr dict) capital) (caadr dict))
+		      (and (equal (car (cdaddr dict)) capital) (caaddr dict))
+		      (and (equal (cadadr (cddr dict)) capital) (caaddr (cdr dict)))))
+	\end{lstlisting}
+
+	2 способ — количество элементов в списках не фиксировано.
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun map-make-dict (countries capitals)
+		  (mapcar #'(lambda (a b) (list a b)) countries capitals))
+
+		(defun map-get-capital (dict country)
+		  (mapcan #'(lambda (elem)
+		    (cond ((equal (car elem) country)
+		          (return-from map-get-capitals (cadr elem)))))
+		  dict))
+
+		(defun map-get-country (dict capital)
+		  (mapcan #'(lambda (elem)
+		    (cond ((equal (cadr elem) capital)
+		          (list (car elem)))))
+		  dict))
+	\end{lstlisting}
+\end{task}
+
+\end{document}
