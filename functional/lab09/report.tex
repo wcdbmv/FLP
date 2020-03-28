@@ -1,0 +1,247 @@
+\documentclass[a4paper,oneside,12pt]{extreport}
+
+\include{preamble}
+
+\begin{document}
+
+\include{title}
+
+\begin{task}
+	Написать предикат \code{set-equal}, который возвращает \code{t}, если два его множество-аргумента содержат одни и те же элементы, порядок которых не имеет значения.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun set-equal (a b)
+		  (null (set-exclusive-or a b)))
+	\end{lstlisting}
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun set-equal (a b)
+		  (if (= (list-length a) (list-length b))
+		      (reduce
+		        (lambda (acc cur)
+		          (if acc (member cur b) nil))
+		        a
+		        :initial-value t)
+		      nil))
+	\end{lstlisting}
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun set-equal (a b)
+		  (defun set-equal-process (a)
+		    (cond ((null a) t)
+		          ((member (car a) b) (set-equal-process (cdr a)))
+		          (t nil)))
+		  (if (= (list-length a) (list-length b))
+		      (set-equal-process a)
+		      nil))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Напишите необходимые функции, которые обрабатывают таблицу из точечных пар: \code{(страна . столица)}, и возвращают по стране — столицу, а по столице — страну.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun get-by-template (getter setter dict value)
+		  (reduce
+		    (lambda (acc cur)
+		      (cond (acc acc)
+		            ((equal value (funcall getter cur)) (funcall setter cur))
+		            (t nil)))
+		    dict
+		   :initial-value nil))
+
+		(defun get-capital-by-country (dict country)
+		  (get-by-template #'car #'cdr dict country))
+
+		(defun get-country-by-capital (dict capital)
+		  (get-by-template #'cdr #'car dict capital))
+	\end{lstlisting}
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun get-by-template (getter setter dict value)
+		  (cond ((null dict) nil)
+		        ((equal (funcall getter dict) value) (funcall setter dict))
+		        (t (get-by-template getter setter (cdr dict) value))))
+
+		(defun get-capital-by-country (dict country)
+		  (get-by-template #'caar #'cdar dict country))
+
+		(defun get-country-by-capital (dict capital)
+		  (get-by-template #'cdar #'caar dict capital))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Напишите функцию, которая умножает на заданное число-аргумент все числа из заданного списка-аргумента, когда а) все элементы списка — числа, б)  элементы списка — любые объекты.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun mult-a (lst number)
+		  (mapcar
+		    (lambda (item)
+		      (* item number))
+		  lst))
+
+		(defun mult-b (lst number)
+		  (mapcar
+		    (lambda (item)
+		      (if (numberp item)
+		          (* item number)
+		          item))
+		  lst))
+	\end{lstlisting}
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun mult-a (lst number)
+		  (defun mult-a-process (lst acc)
+		    (if lst
+		        (mult-a-process
+		          (cdr lst)
+		          (append acc
+		            (list (* (car lst) number))))
+		        acc))
+		  (mult-a-process lst nil))
+
+		(defun mult-b (lst number)
+		  (defun mult-b-process (lst acc)
+		    (if lst
+		        (mult-b-process
+		          (cdr lst)
+		          (append acc
+		            (if (numberp (car lst))
+		                (list (* number (car lst)))
+		                (list (car lst)))))
+		        acc))
+		  (mult-b-process lst nil))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Напишите функцию, которая уменьшает на 10 все числа из списка аргумента этой функции.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun minus (lst number)
+		  (mapcar
+		    (lambda (item)
+		      (- item number))
+		    lst))
+
+		(defun minus-ten (lst)
+		  (minus lst 10))
+	\end{lstlisting}
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun minus (lst number)
+		  (defun minus-process (lst acc)
+		    (if lst
+		        (minus-process
+		          (cdr lst)
+		          (append acc
+		            (list (- (car lst) number))))
+		        acc))
+		  (minus-process lst nil))
+
+		(defun minus-ten (lst)
+		  (minus lst 10))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать функцию, которая возвращает первый аргумент списка-аргумента, который сам является непустым списком.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun get-first-sublist (lst)
+		  (reduce
+		    (lambda (acc cur)
+		      (cond (acc acc)
+		            ((listp cur) cur)
+		            (t nil)))
+		    lst
+		    :initial-value nil))
+	\end{lstlisting}
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun not-empty-list (lst)
+		  (and (listp lst) lst))
+
+		(defun get-first-sublist (lst)
+		  (cond ((null lst) nil)
+		        ((not-empty-list (car lst)) (car lst))
+		        (t (get-first-sublist (cdr lst)))))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать функцию, которая выбирает из заданного списка только те числа, которые больше 1 и меньше 10.
+	(Вариант: между двумя заданными границами)
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun between (lst a b)
+		  (reduce
+		    (lambda (acc cur)
+		      (if (and (< a cur) (< cur b))
+		          (append acc (list cur))
+		          acc))
+		    lst
+		    :initial-value nil))
+
+		(defun between-1-10 (lst)
+		  (between lst 1 10))
+	\end{lstlisting}
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun between (lst a b)
+		  (defun is-between (number)
+		    (and (< a number) (< number b)))
+		  (defun between-process (lst acc)
+		    (if lst
+		        (between-process
+		          (cdr lst)
+		          (if (is-between (car lst))
+		              (append acc (list (car lst)))
+		              acc))
+		        acc))
+		  (between-process lst nil))
+
+		(defun between-1-10 (lst)
+		  (between lst 1 10))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать функцию, вычисляющую декартово произведение двух своих списков-аргументов.
+	(Напомним, что $A\times B$ — это множество всевозможных пар $(a\;b)$, где $a\in A$, $b\in B$)
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun set-mult (a b)
+		  (apply
+		    #'append
+		    (mapcar
+		      (lambda (item-a)
+		        (mapcar
+		          (lambda (item-b)
+		            (list item-a item-b))
+		          b))
+		      a)))
+	\end{lstlisting}
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun set-mult (a b)
+		  (defun set-mul-process (x y)
+		    (cond ((null x) nil)
+		          ((null y) (set-mul-process (cdr x) b))
+		          (t (cons (list (car x) (car y))
+		                   (set-mul-process x (cdr y))))))
+		  (set-mul-process a b))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Почему так реализовано \code{reduce}, в чем причина?
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(reduce #'+ 0)  ; 0
+		(reduce #'+ ()) ; 0
+	\end{lstlisting}
+\end{task}
+
+\end{document}
