@@ -6,23 +6,39 @@
 
 \include{title}
 
+\section*{Практическая часть}
+
 \begin{task}
 	Пусть \code{list-of-list} список, состоящий из списков.
 	Написать функцию, которая вычисляет сумму длин всех элементов \code{list-of-list}, т.~е. например для аргумента \code{((1 2) (3 4)) -> 4}.
 
 	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun sum-of-lengths-process (list-of-list acc)
+		  (if list-of-list
+		      (sum-of-lengths-process
+		        (cdr list-of-list)
+		        (+ acc (length (car list-of-list))))
+		      acc))
+
 		(defun sum-of-lengths (list-of-list)
-		  (defun sum-of-lengths-process (list-of-list acc)
-		    (if list-of-list
-		        (sum-of-lengths-process
-		          (cdr list-of-list)
-		          (+ acc
-		             (if (atom (car list-of-list))
-		                 1
-		                 (length (car list-of-list)))))
-		        acc))
 		  (sum-of-lengths-process list-of-list 0))
 	\end{lstlisting}
+
+	Функция \code{sum-of-lengths-process} принимает список списков \code{list-of-list} и накопленную сумму \code{acc}.
+	Если дошли до конца списка, возвращает накопленную сумму.
+	Иначе, вычисляется рекурсивно для хвоста и накопленной суммы, к которой прибавлена длина списка в голове \code{list-of-list}.
+
+	Примеры работы:
+	\begin{table}[H]
+		\begin{center}
+			\begin{tabular}{|l|l|}
+				\hline
+				\textbf{list-of-list} & \textbf{(sum-of-lengths list-of-list)} \\ \hline
+				\code{((1 2) (3 4))} & \code{4} \\ \hline
+				\code{((1 2 (3 3 3)) (4 5 (6 6 6)))} & \code{6} \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
 \end{task}
 
 \begin{task}
@@ -30,15 +46,33 @@
 	Например: \code{(reg-add (2 4 6)) -> 12}.
 
 	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun reg-add-process (lst acc)
+		  (if lst
+		      (reg-add-process
+		        (cdr lst)
+		        (+ acc (car lst)))
+		      acc))
+
 		(defun reg-add (lst)
-		  (defun reg-add-process (lst acc)
-		    (if lst
-		        (reg-add-process
-		          (cdr lst)
-		          (+ acc (car lst)))
-		        acc))
 		  (reg-add-process lst 0))
 	\end{lstlisting}
+
+	Функция \code{reg-add-process} принимает список чисел \code{lst} и накопленную сумму \code{acc}.
+	Если дошли до конца списка, возвращает накопленную сумму.
+	Иначе, вычисляется рекурсивно для хвоста и накопленной суммы, к которой прибавили число в голове списка.
+
+	Примеры работы:
+	\begin{table}[H]
+		\begin{center}
+			\begin{tabular}{|l|l|}
+				\hline
+				\textbf{lst} & \textbf{(reg-add lst)} \\ \hline
+				\code{(1 2 3 4)} & \code{10} \\ \hline
+				\code{(1 2 3 4 5)} & \code{15} \\ \hline
+				\code{()} & \code{0} \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
 \end{task}
 
 \begin{task}
@@ -50,22 +84,59 @@
 		        ((= n 0) (car lst))
 		        (t (recnth (- n 1) (cdr lst)))))
 	\end{lstlisting}
+
+	Функция \code{recnth} принимает индекс \code{n} и список \code{lst}.
+	Если дошли до конца списка, возвращает \code{nil}.
+	Иначе, если $n = 0$, возвращает голову списка.
+	Иначе, вычисляется рекурсивно для $n - 1$ и хвоста списка.
+
+	Примеры работы:
+	\begin{table}[H]
+		\begin{center}
+			\begin{tabular}{|l|l|l|}
+				\hline
+				\textbf{n} & \textbf{lst} & \textbf{(recnth n lst)} \\ \hline
+				\code{2} & \code{(1 2 3 4)} & \code{3} \\ \hline
+				\code{4} & \code{(1 2 3 4)} & \code{nil} \\ \hline
+				\code{4} & \code{()} & \code{nil} \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
 \end{task}
 
 \begin{task}
 	Написать рекурсивную функцию \code{alloddr}, которая возвращает \code{t} когда все элементы списка нечетные.
 
 	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun alloddr-process (lst acc)
+		  (if (or (null acc)
+		          (null lst))
+		      acc
+		      (alloddr-process
+		        (cdr lst)
+		        (oddp (car lst)))))
+
 		(defun alloddr (lst)
-		  (defun alloddr-process (lst acc)
-		    (if (or (null acc)
-		            (null lst))
-		        acc
-		        (alloddr-process
-		          (cdr lst)
-		          (oddp (car lst)))))
 		  (alloddr-process lst t))
 	\end{lstlisting}
+
+	Функция \code{alloddr-process} принимает список чисел \code{lst} и результат \code{acc}.
+	Если дошли до конца списка или результат \code{nil}, возвращает результат.
+	Иначе, вычисляется рекурсивно для хвоста и результата, который равен \code{t}, если голова списка является нечётным числом, и \code{nil} иначе.
+
+	Примеры работы:
+	\begin{table}[H]
+		\begin{center}
+			\begin{tabular}{|l|l|}
+				\hline
+				\textbf{lst} & \textbf{(alloddr lst)} \\ \hline
+				\code{(1 2 3 4 5)} & \code{nil} \\ \hline
+				\code{(1 3 5)} & \code{t} \\ \hline
+				\code{(1 3 5 4)} & \code{nil} \\ \hline
+				\code{()} & \code{nil} \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
 \end{task}
 
 \begin{task}
@@ -77,15 +148,28 @@
 		      (rec-last (cdr lst))
 		      (car lst)))
 	\end{lstlisting}
+
+	Функция \code{rec-last} принимает список \code{lst}.
+	Если хвост списка не пустой, функция вычисляется рекурсивно для него (хвоста списка).
+	Иначе, возвращает голову списка (последний элемент).
+
+	Примеры работы:
+	\begin{table}[H]
+		\begin{center}
+			\begin{tabular}{|l|l|}
+				\hline
+				\textbf{lst} & \textbf{(rec-last lst)} \\ \hline
+				\code{(1 2 3 4)} & \code{4} \\ \hline
+				\code{(1 2 3 4 5)} & \code{5} \\ \hline
+				\code{()} & \code{nil} \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
 \end{task}
 
 \begin{task}
 	Написать рекурсивную функцию, относящуюся к дополняемой рекурсии с одним тестом завершения, которая вычисляет сумму всех чисел от 0 до $n$-ого аргумента функции.
-	Вариант:
-	\begin{enumerate}
-		\item от $n$-аргумента функции до последнего >= 0,
-		\item от $n$-аргумента функции до $t$-аргумента с шагом $d$.
-	\end{enumerate}
+	Вариант: 1) от $n$-аргумента функции до последнего >= 0.
 
 	\begin{lstlisting}[language=Lisp, gobble=16]
 		(defun sum-to-n (lst n)
@@ -101,35 +185,94 @@
 		        (sum-from-n (cdr lst) (- n 1)))
 		      0))
 	\end{lstlisting}
+
+	Функция \code{sum-to-n} принимает список \code{lst}.
+	Если список не пустой и $n > 0$, возвращает сумму головы списка с результатом рекурсивного вычисления функции для хвоста списка и $n - 1$.
+	Иначе, возвращает 0.
+
+	Функция \code{sum-from-n} принимает список \code{lst}.
+	Если список пустой, возвращает 0.
+	Иначе, возвращает сумму, где первое слагаемое является головой списка в случае, если $n < 0$, и нулём иначе, а второе слагаемое — результатом рекурсивного вычисления функции для хвоста списка и $n - 1$.
+
+	Примеры работы:
+	\begin{table}[H]
+		\begin{center}
+			\begin{tabular}{|l|l|l|l|}
+				\hline
+				\textbf{lst} & \textbf{n} & \textbf{(sum-to-n lst n)} & \textbf{(sum-from-n lst n)} \\ \hline
+				\code{(1 2 3 4 5)} & \code{2} &\code{3}  & \code{12} \\ \hline
+				\code{(1 2 3 4 5)} & \code{5} &\code{15} & \code{0}  \\ \hline
+				\code{(1 2 3 4 5)} & \code{0} &\code{0}  & \code{15} \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
 \end{task}
 
 \begin{task}
 	Написать рекурсивную функцию, которая возвращает последнее нечетное число из числового списка, возможно создавая некоторые вспомогательные функции.
 
 	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun last-odd-process (lst acc)
+		  (if lst
+		      (last-odd-process
+		        (cdr lst)
+		        (if (oddp (car lst))
+		            (car lst)
+		            acc))
+		      acc))
+
 		(defun last-odd (lst)
-		  (defun last-odd-process (lst acc)
-		    (if lst
-		        (last-odd-process
-		          (cdr lst)
-		          (if (oddp (car lst))
-		              (car lst)
-		              acc))
-		        acc))
 		  (last-odd-process lst nil))
 	\end{lstlisting}
+
+	Функция \code{last-odd-process} принимает список \code{lst} и результат \code{acc}.
+	Если дошли до конца списка, возвращает результат.
+	Иначе, вычисляется рекурсивно для хвоста и результата, который равен голове списка, если она (голова списка) является нечётным числом, или прежнему результату иначе.
+
+	Примеры работы:
+	\begin{table}[H]
+		\begin{center}
+			\begin{tabular}{|l|l|}
+				\hline
+				\textbf{lst} & \textbf{(last-odd lst)} \\ \hline
+				\code{(1 2 3 4)} & \code{3} \\ \hline
+				\code{(1 2 3 4 5)} & \code{5} \\ \hline
+				\code{(2 4 6)} & \code{nil} \\ \hline
+				\code{()} & \code{nil} \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
 \end{task}
 
 \begin{task}
 	Используя \code{cons}-дополняемую рекурсию с одним тестом завершения, написать функцию которая получает как аргумент список чисел, а возвращает список квадратов этих чисел в том же порядке.
 
 	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun sqr (number)
+		  (* number number))
+
 		(defun sqr-lst (lst)
 		  (if lst
 		      (cons (sqr (car lst))
 		            (sqr-lst (cdr lst)))
 		      nil))
 	\end{lstlisting}
+
+	Функция \code{sqr-lst} принимает список \code{lst}.
+	Если список не пустой и возвращает список, голова которого является квадратом исходной головы списка, а хвост — результатом рекурсивного вычисления функции для хвоста исходного списка.
+	Иначе, возвращает \code{nil}.
+
+	Примеры работы:
+	\begin{table}[H]
+		\begin{center}
+			\begin{tabular}{|l|l|}
+				\hline
+				\textbf{lst} & \textbf{(last-odd lst)} \\ \hline
+				\code{(1 2 3 4)} & \code{(1 4 9 16)} \\ \hline
+				\code{()} & \code{()} \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
 \end{task}
 
 \begin{task}
@@ -153,28 +296,84 @@
 		          (select-even (cdr lst)))
 		      nil))
 
+		(defun sum-all-odd-process (lst acc)
+		  (if lst
+		      (sum-all-odd-process
+		        (cdr lst)
+		        (if (oddp (car lst))
+		            (+ acc (car lst))
+		            acc))
+		      acc))
+
 		(defun sum-all-odd (lst)
-		  (defun sum-all-odd-process (lst acc)
-		    (if lst
-		        (sum-all-odd-process
-		          (cdr lst)
-		          (if (oddp (car lst))
-		              (+ acc (car lst))
-		              acc))
-		        acc))
 		  (sum-all-odd-process lst 0))
 
+		(defun sum-all-even-process (lst acc)
+		  (if lst
+		      (sum-all-even-process
+		        (cdr lst)
+		        (if (evenp (car lst))
+		            (+ acc (car lst))
+		            acc))
+		      acc))
+
 		(defun sum-all-even (lst)
-		  (defun sum-all-even-process (lst acc)
-		    (if lst
-		        (sum-all-even-process
-		          (cdr lst)
-		          (if (evenp (car lst))
-		              (+ acc (car lst))
-		              acc))
-		        acc))
 		  (sum-all-even-process lst 0))
 	\end{lstlisting}
+
+	Примеры работы:
+	\begin{table}[H]
+		\begin{center}
+			\begin{tabular}{|l|l|l|l|l|}
+				\hline
+				\textbf{lst} & \textbf{(select-odd lst)} & \textbf{(select-even lst)} & \textbf{(sum-all-odd lst)} & \textbf{(sum-all-even lst)} \\ \hline
+				\code{(1 2 3 4 5)} & \code{(1 3 5)} & \code{(2 4)}  & \code{9} & \code{6} \\ \hline
+				\code{(1 3 5)} & \code{(1 3 5)} & \code{()}  & \code{9} & \code{0} \\ \hline
+				\code{()} & \code{()} &\code{()}  & \code{0} & \code{0} \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
 \end{task}
 
+\section*{Теоретическая часть}
+
+\subsection*{Способы организации повторных вычислений в Lisp}
+
+Для организации повторных вычислений в Lisp могут быть использованы функционалы и рекурсия.
+
+\subsection*{Что такое рекурсия? Классификация рекурсивных функций в Lisp}
+
+Рекурсия — это ссылка на определяемый объект во время его определения.
+
+В Lisp существует классификация рекурсивных функций:
+\begin{itemize}
+	\item простая рекурсия — один рекурсивный вызов в теле;
+	\item рекурсия первого порядка — рекурсивный вызов встречается несколько раз;
+	\item взаимная рекурсия — используется несколько функций, рекурсивно вызывающих друг друга.
+\end{itemize}
+
+\subsection*{Различные способы организации рекурсивных функций и порядок их реализации}
+
+При организации рекурсии можно использовать как функции с именем, так и локально определенные с помощью лямбда-выражений функции.
+Кроме этого, при организации рекурсии можно использовать функционалы или использовать рекурсивную функцию внутри функционала.
+При изучении рекурсии рекомендуется организовывать и отлаживать реализацию отдельных подзадач исходной задачи, обращая внимание на эффективность реализации и качество работы, а потом, при необходимости, встраивать эти функции в более крупные, возможно в виде лямбда-выражений.
+
+\subsection*{Способы повышения эффективности реализации рекурсии}
+
+\begin{itemize}
+	\item {\bfseries Хвостовая рекурсия}.
+	В целях повышения эффективности рекурсивных функций рекомендуется формировать результат не на выходе из рекурсии, а на входе в рекурсию, все действия выполняя до ухода на следующий шаг рекурсии.
+
+	Преобразование не хвостовой рекурсии в хвостовую, возможно путем использования дополнительных параметров.
+	В этом случае необходимо использовать функцию-оболочку для запуска рекурсивной функции с начальными значениями дополнительных параметров.
+
+	\item {\bfseries Дополняемая рекурсия}.
+	При обращении к рекурсивной функции используется дополнительная функция не в аргументе вызова, а вне его.
+
+	\item {\bfseries Выделяют группу функций множественной рекурсии}.
+	На одной ветке происходит сразу несколько рекурсивных вызовов.
+	Количество условий выхода также может зависеть от задачи.
+\end{itemize}
+
 \end{document}
+tell me you love me youll get i love you more
