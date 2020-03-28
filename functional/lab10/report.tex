@@ -1,0 +1,180 @@
+\documentclass[a4paper,oneside,12pt]{extreport}
+
+\include{preamble}
+
+\begin{document}
+
+\include{title}
+
+\begin{task}
+	Пусть \code{list-of-list} список, состоящий из списков.
+	Написать функцию, которая вычисляет сумму длин всех элементов \code{list-of-list}, т.~е. например для аргумента \code{((1 2) (3 4)) -> 4}.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun sum-of-lengths (list-of-list)
+		  (defun sum-of-lengths-process (list-of-list acc)
+		    (if list-of-list
+		        (sum-of-lengths-process
+		          (cdr list-of-list)
+		          (+ acc
+		             (if (atom (car list-of-list))
+		                 1
+		                 (length (car list-of-list)))))
+		        acc))
+		  (sum-of-lengths-process list-of-list 0))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать рекурсивную версию (с именем \code{reg-add}) вычисления суммы чисел заданного списка.
+	Например: \code{(reg-add (2 4 6)) -> 12}.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun reg-add (lst)
+		  (defun reg-add-process (lst acc)
+		    (if lst
+		        (reg-add-process
+		          (cdr lst)
+		          (+ acc (car lst)))
+		        acc))
+		  (reg-add-process lst 0))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать рекурсивную версию с именем \code{recnth} функции \code{nth}.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun recnth (n lst)
+		  (cond ((null lst) nil)
+		        ((= n 0) (car lst))
+		        (t (recnth (- n 1) (cdr lst)))))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать рекурсивную функцию \code{alloddr}, которая возвращает \code{t} когда все элементы списка нечетные.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun alloddr (lst)
+		  (defun alloddr-process (lst acc)
+		    (if (or (null acc)
+		            (null lst))
+		        acc
+		        (alloddr-process
+		          (cdr lst)
+		          (oddp (car lst)))))
+		  (alloddr-process lst t))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать рекурсивную функцию, относящуюся к хвостовой рекурсии с одним тестом завершения, которая возвращает последний элемент списка — аргументы.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun rec-last (lst)
+		  (if (cdr lst)
+		      (rec-last (cdr lst))
+		      (car lst)))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать рекурсивную функцию, относящуюся к дополняемой рекурсии с одним тестом завершения, которая вычисляет сумму всех чисел от 0 до $n$-ого аргумента функции.
+	Вариант:
+	\begin{enumerate}
+		\item от $n$-аргумента функции до последнего >= 0,
+		\item от $n$-аргумента функции до $t$-аргумента с шагом $d$.
+	\end{enumerate}
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun sum-to-n (lst n)
+		  (if (and lst (> n 0))
+		      (+ (car lst)
+		         (sum-to-n (cdr lst) (- n 1)))
+		      0))
+
+		(defun sum-from-n (lst n)
+		  (if lst
+		      (+
+		        (if (<= n 0) (car lst) 0)
+		        (sum-from-n (cdr lst) (- n 1)))
+		      0))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать рекурсивную функцию, которая возвращает последнее нечетное число из числового списка, возможно создавая некоторые вспомогательные функции.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun last-odd (lst)
+		  (defun last-odd-process (lst acc)
+		    (if lst
+		        (last-odd-process
+		          (cdr lst)
+		          (if (oddp (car lst))
+		              (car lst)
+		              acc))
+		        acc))
+		  (last-odd-process lst nil))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Используя \code{cons}-дополняемую рекурсию с одним тестом завершения, написать функцию которая получает как аргумент список чисел, а возвращает список квадратов этих чисел в том же порядке.
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun sqr-lst (lst)
+		  (if lst
+		      (cons (sqr (car lst))
+		            (sqr-lst (cdr lst)))
+		      nil))
+	\end{lstlisting}
+\end{task}
+
+\begin{task}
+	Написать функцию с именем \code{select-odd}, которая из заданного списка выбирает все нечетные числа.
+	(Вариант 1: \code{select-even}, вариант 2: вычисляет сумму всех нечетных чисел (\code{sum-all-odd}) или сумму всех четных чисел (\code{sum-all-even}) из заданного списка)
+
+	\begin{lstlisting}[language=Lisp, gobble=16]
+		(defun select-odd (lst)
+		  (if lst
+		      (if (oddp (car lst))
+		          (cons (car lst)
+		                (select-odd (cdr lst)))
+		          (select-odd (cdr lst)))
+		      nil))
+
+		(defun select-even (lst)
+		  (if lst
+		      (if (evenp (car lst))
+		          (cons (car lst)
+		                (select-even (cdr lst)))
+		          (select-even (cdr lst)))
+		      nil))
+
+		(defun sum-all-odd (lst)
+		  (defun sum-all-odd-process (lst acc)
+		    (if lst
+		        (sum-all-odd-process
+		          (cdr lst)
+		          (if (oddp (car lst))
+		              (+ acc (car lst))
+		              acc))
+		        acc))
+		  (sum-all-odd-process lst 0))
+
+		(defun sum-all-even (lst)
+		  (defun sum-all-even-process (lst acc)
+		    (if lst
+		        (sum-all-even-process
+		          (cdr lst)
+		          (if (evenp (car lst))
+		              (+ acc (car lst))
+		              acc))
+		        acc))
+		  (sum-all-even-process lst 0))
+	\end{lstlisting}
+\end{task}
+
+\end{document}
